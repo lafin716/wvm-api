@@ -12,10 +12,10 @@ class CreateWebAppInteractor(
 
   override fun create(input: Input): Output {
 
-    return CreateWebbAppOutput()
+    return CreateWebbAppOutput(true)
   }
 
-  class CreateWebAppInput(
+  data class CreateWebAppInput(
     val name: String,
     val initUrl: String,
     val theme: AppTheme,
@@ -26,7 +26,18 @@ class CreateWebAppInteractor(
     }
   }
 
-  class CreateWebbAppOutput : Output {
 
+
+  data class CreateWebbAppOutput(
+    val result: Boolean,
+  ) : Output {
+
+    var message: String? = ""
+
+    constructor(result: Boolean, message: String?): this(result) {
+      this.message = message ?: ""
+    }
+
+    override val status: Boolean = result
   }
 }
