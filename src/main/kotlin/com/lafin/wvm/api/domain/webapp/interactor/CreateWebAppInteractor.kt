@@ -35,7 +35,7 @@ class CreateWebAppInteractor(
     )
 
     val savedApp = repository.save(webApp)
-    if (savedApp.id == null) {
+    if (savedApp.id == 0L) {
       return CreateWebbAppOutput(
         result = false,
         message = "신규 앱 추가가 실패하였습니다.",
@@ -64,6 +64,7 @@ class CreateWebAppInteractor(
   data class CreateWebbAppOutput(
     val result: Boolean,
   ) : Output {
+
     var message: String? = ""
 
     constructor(result: Boolean, message: String?): this(result) {
@@ -71,5 +72,6 @@ class CreateWebAppInteractor(
     }
 
     override val status: Boolean = result
+
   }
 }
