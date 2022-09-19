@@ -1,12 +1,13 @@
 package com.lafin.wvm.api.domain.webapp.model
 
-import org.hibernate.usertype.UserType
+import com.lafin.wvm.api.shared.type.UserType
 import java.time.LocalDateTime
 
 data class ChangeLog(
-  val id: Long,
+  val appId: Long,
   val userId: Long,
-  val userType: UserType,
   val message: String,
-  val createdAt: LocalDateTime,
+  val id: Long = 0L,
+  val userType: UserType = UserType.USER,
+  val createdAt: LocalDateTime = LocalDateTime.now(),
 )
