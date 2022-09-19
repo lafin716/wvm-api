@@ -1,4 +1,4 @@
-package com.lafin.wvm.api.domain
+package com.lafin.wvm.api.shared.domain.io
 
 interface Output {
   val status: Boolean

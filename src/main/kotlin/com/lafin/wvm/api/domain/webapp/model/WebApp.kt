@@ -1,5 +1,6 @@
 package com.lafin.wvm.api.domain.webapp.model
 
+import com.lafin.wvm.api.shared.status.BuildStatus
 import com.lafin.wvm.api.shared.status.WebAppStatus
 import com.lafin.wvm.api.shared.type.AppPlatform
 import com.lafin.wvm.api.shared.type.AppTheme
@@ -7,7 +8,7 @@ import com.lafin.wvm.api.shared.type.LicenseType
 import java.time.LocalDateTime
 
 class WebApp(
-  val id: Long,
+  val id: Long?,
   val userId: Long,
   var name: String,
   var theme: AppTheme = AppTheme.DEFAULT,
@@ -16,13 +17,16 @@ class WebApp(
   var initUrl: String,
 ) {
   var status: WebAppStatus = WebAppStatus.CREATED
+  var buildStatus: BuildStatus = BuildStatus.NOT_PREPARED
   var createdAt: LocalDateTime = LocalDateTime.now()
   var updatedAt: LocalDateTime? = null
-  var logs: List<ChangeLog>? = null
+  var lastBuiltAt: LocalDateTime? = null
   var deletedAt: LocalDateTime? = null
+  var logs: List<ChangeLog>? = null
 
   fun ready() {
     status = WebAppStatus.READY
+    buildStatus = BuildStatus.PREPARED
     updatedAt = LocalDateTime.now()
   }
 
