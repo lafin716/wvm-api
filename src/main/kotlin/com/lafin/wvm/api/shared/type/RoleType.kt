@@ -1,6 +1,6 @@
 package com.lafin.wvm.api.shared.type
 
-enum class UserType {
+enum class RoleType {
   USER,
   ADMIN,
 }

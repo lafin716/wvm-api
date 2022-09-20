@@ -10,12 +10,12 @@ import com.lafin.wvm.api.shared.type.AppTheme
 import com.lafin.wvm.api.shared.type.LicenseType
 import org.springframework.stereotype.Service
 
-@Service
+//@Service
 class CreateWebAppInteractor(
-  val repository: WebAppRepository
-): CreateWebAppUseCase<CreateWebAppInteractor.CreateWebAppInput, CreateWebAppInteractor.CreateWebbAppOutput> {
+  private val repository: WebAppRepository
+): CreateWebAppUseCase<CreateWebAppInput, CreateWebbAppOutput> {
 
-  override fun create(input: CreateWebAppInput): CreateWebbAppOutput {
+  override fun execute(input: CreateWebAppInput): CreateWebbAppOutput {
     input.validate()
 
     if (repository.isDuplicateName(input.name)) {
@@ -47,31 +47,31 @@ class CreateWebAppInteractor(
       message = "신규 앱이 추가되었습니다.",
     )
   }
+}
 
-  data class CreateWebAppInput(
-    val userId: Long,
-    val name: String,
-    val initUrl: String,
-    val theme: AppTheme,
-    val platform: AppPlatform,
-    val licenseType: LicenseType,
-  ) : Input {
-    override fun validate(): Boolean {
-      return true
-    }
+data class CreateWebAppInput(
+  val userId: Long,
+  val name: String,
+  val initUrl: String,
+  val theme: AppTheme,
+  val platform: AppPlatform,
+  val licenseType: LicenseType,
+) : Input {
+  override fun validate(): Boolean {
+    return true
+  }
+}
+
+data class CreateWebbAppOutput(
+  val result: Boolean,
+) : Output {
+
+  var message: String? = ""
+
+  constructor(result: Boolean, message: String?): this(result) {
+    this.message = message ?: ""
   }
 
-  data class CreateWebbAppOutput(
-    val result: Boolean,
-  ) : Output {
+  override val status: Boolean = result
 
-    var message: String? = ""
-
-    constructor(result: Boolean, message: String?): this(result) {
-      this.message = message ?: ""
-    }
-
-    override val status: Boolean = result
-
-  }
 }

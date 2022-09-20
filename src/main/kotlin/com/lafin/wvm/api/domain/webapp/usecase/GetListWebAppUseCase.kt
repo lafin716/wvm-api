@@ -4,5 +4,5 @@ import com.lafin.wvm.api.shared.domain.io.Input
 import com.lafin.wvm.api.shared.domain.io.Output
 import com.lafin.wvm.api.shared.domain.io.UseCase
 
-interface CreateWebAppUseCase<I: Input, O: Output>: UseCase<I, O> {
+interface GetListWebAppUseCase<I: Input, O: Output>: UseCase<I, O> {
 }

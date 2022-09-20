@@ -1,6 +1,6 @@
 package com.lafin.wvm.api.domain.webapp.model
 
-import com.lafin.wvm.api.shared.type.UserType
+import com.lafin.wvm.api.shared.type.RoleType
 import java.time.LocalDateTime
 
 data class ChangeLog(
@@ -8,6 +8,6 @@ data class ChangeLog(
   val userId: Long,
   val message: String,
   val id: Long = 0L,
-  val userType: UserType = UserType.USER,
+  val roleType: RoleType = RoleType.USER,
   val createdAt: LocalDateTime = LocalDateTime.now(),
 )
