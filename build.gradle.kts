@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
   id("org.springframework.boot") version "2.7.3"
   id("io.spring.dependency-management") version "1.0.13.RELEASE"
+  id("org.jetbrains.kotlin.plugin.allopen") version "1.3.61"
   kotlin("jvm") version "1.6.21"
   kotlin("plugin.spring") version "1.6.21"
   kotlin("plugin.jpa") version "1.6.21"
@@ -31,6 +32,12 @@ dependencies {
   testImplementation("org.springframework.amqp:spring-rabbit-test")
   testImplementation("org.springframework.security:spring-security-test")
   testImplementation("io.mockk:mockk:1.12.8")
+}
+
+allOpen {
+  annotation("javax.persistence.Entity")
+  annotation("javax.persistence.MappedSuperclass")
+  annotation("javax.persistence.Embeddable")
 }
 
 tasks.withType<KotlinCompile> {

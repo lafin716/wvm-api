@@ -1,6 +1,6 @@
 package com.lafin.wvm.api.domain.webapp.interactor
 
-import com.lafin.wvm.api.domain.webapp.gateway.WebAppRepository
+import com.lafin.wvm.api.domain.webapp.gateway.WebAppPersistence
 import com.lafin.wvm.api.domain.webapp.model.WebApp
 import com.lafin.wvm.api.shared.type.AppPlatform
 import com.lafin.wvm.api.shared.type.AppTheme
@@ -12,7 +12,7 @@ import org.mockito.InjectMocks
 
 class CreateWebAppInteractorTest {
 
-  private val mockRepository: WebAppRepository = mockk()
+  private val mockRepository: WebAppPersistence = mockk()
 
   @InjectMocks
   val interactor: CreateWebAppInteractor = CreateWebAppInteractor(mockRepository)

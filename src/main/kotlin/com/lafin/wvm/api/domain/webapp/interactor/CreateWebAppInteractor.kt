@@ -1,6 +1,7 @@
 package com.lafin.wvm.api.domain.webapp.interactor
 
-import com.lafin.wvm.api.domain.webapp.gateway.WebAppRepository
+import com.lafin.wvm.api.domain.webapp.gateway.WebAppCondition
+import com.lafin.wvm.api.domain.webapp.gateway.WebAppPersistence
 import com.lafin.wvm.api.domain.webapp.model.WebApp
 import com.lafin.wvm.api.shared.domain.io.Input
 import com.lafin.wvm.api.shared.domain.io.Output
@@ -10,12 +11,12 @@ import com.lafin.wvm.api.shared.type.AppTheme
 import com.lafin.wvm.api.shared.type.LicenseType
 import org.springframework.stereotype.Service
 
-//@Service
+@Service
 class CreateWebAppInteractor constructor(
-  _repository: WebAppRepository,
-): CreateWebAppUseCase<CreateWebAppInput, CreateWebbAppOutput> {
+  _repository: WebAppPersistence,
+) : CreateWebAppUseCase<CreateWebAppInput, CreateWebbAppOutput> {
 
-  val repository: WebAppRepository
+  val repository: WebAppPersistence
 
   init {
     repository = _repository
@@ -24,7 +25,14 @@ class CreateWebAppInteractor constructor(
   override fun execute(input: CreateWebAppInput): CreateWebbAppOutput {
     input.validate()
 
-    if (repository.isDuplicateName(input.name)) {
+    val isDuplicated = repository.isDuplicateName(
+      WebAppCondition(
+        userId = input.userId,
+        name = input.name,
+      )
+    )
+
+    if (isDuplicated) {
       return CreateWebbAppOutput(
         result = false,
         message = "이미 존재하는 이름입니다.",
@@ -41,14 +49,17 @@ class CreateWebAppInteractor constructor(
     )
     webApp.create()
 
-    val savedApp = repository.save(webApp)
+    val savedApp = repository.save(webApp) ?: return CreateWebbAppOutput(
+      result = false,
+      message = "신규 앱을 추가하는 중 문제가 발생하였습니다.",
+    )
     if (savedApp.id == 0L) {
       return CreateWebbAppOutput(
         result = false,
         message = "신규 앱 추가가 실패하였습니다.",
       )
     }
-    
+
     return CreateWebbAppOutput(
       result = true,
       message = "신규 앱이 추가되었습니다.",

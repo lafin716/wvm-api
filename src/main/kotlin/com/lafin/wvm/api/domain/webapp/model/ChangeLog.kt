@@ -7,7 +7,7 @@ data class ChangeLog(
   val appId: Long,
   val userId: Long,
   val message: String,
-  val id: Long = 0L,
+  val id: Long? = null,
   val roleType: RoleType = RoleType.USER,
   val createdAt: LocalDateTime = LocalDateTime.now(),
 )

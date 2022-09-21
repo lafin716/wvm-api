@@ -2,6 +2,6 @@ package com.lafin.wvm.api.domain.webapp.gateway
 
 import com.lafin.wvm.api.domain.webapp.model.WebApp
 
-interface BuildGateway {
+interface BuildEventProducer {
   fun requestBuild(app: WebApp): Boolean
 }

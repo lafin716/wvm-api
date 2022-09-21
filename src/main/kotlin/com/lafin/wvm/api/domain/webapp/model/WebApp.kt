@@ -1,5 +1,6 @@
 package com.lafin.wvm.api.domain.webapp.model
 
+import com.lafin.wvm.api.shared.domain.Aggregate
 import com.lafin.wvm.api.shared.status.BuildStatus
 import com.lafin.wvm.api.shared.status.DeployStatus
 import com.lafin.wvm.api.shared.status.WebAppStatus
@@ -8,29 +9,28 @@ import com.lafin.wvm.api.shared.type.AppTheme
 import com.lafin.wvm.api.shared.type.LicenseType
 import java.time.LocalDateTime
 
-data class WebApp(
+data class WebApp (
   val userId: Long,
   var name: String,
   var initUrl: String,
   var platform: AppPlatform,
-  val id: Long = 0L,
+  val id: Long? = null,
   var theme: AppTheme = AppTheme.DEFAULT,
   var licenseType: LicenseType = LicenseType.FREE,
-) {
-  var status: WebAppStatus? = null
-  var buildStatus: BuildStatus? = null
-  var deployStatus: DeployStatus? = null
-  var createdAt: LocalDateTime? = null
-  var updatedAt: LocalDateTime? = null
-  var lastBuiltAt: LocalDateTime? = null
-  var lastDeployedAt: LocalDateTime? = null
-  var deletedAt: LocalDateTime? = null
-  var logs: MutableList<ChangeLog>? = null
+  var status: WebAppStatus = WebAppStatus.CREATED,
+  var buildStatus: BuildStatus = BuildStatus.NOT_PREPARED,
+  var deployStatus: DeployStatus = DeployStatus.NOT_DEPLOYED,
+  var createdAt: LocalDateTime = LocalDateTime.now(),
+  var updatedAt: LocalDateTime? = null,
+  var lastBuiltAt: LocalDateTime? = null,
+  var lastDeployedAt: LocalDateTime? = null,
+  var deletedAt: LocalDateTime? = null,
+  var logs: MutableList<ChangeLog>? = null,
+) : Aggregate {
 
   fun create() {
     status = WebAppStatus.CREATED
     createdAt = LocalDateTime.now()
-    addLog("앱이 생성 되었습니다.")
   }
 
   fun ready() {
@@ -151,13 +151,10 @@ data class WebApp(
   }
 
   private fun addLog(message: String, userId: Long = this.userId) {
-    if (logs == null) {
-      logs = mutableListOf()
-    }
-
+    logs = logs ?: mutableListOf()
     logs!!.add(
       ChangeLog(
-        id,
+        id!!,
         userId,
         message,
       )
