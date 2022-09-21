@@ -5,8 +5,7 @@ import com.lafin.wvm.api.domain.webapp.model.WebApp
 import com.lafin.wvm.api.shared.type.AppPlatform
 import com.lafin.wvm.api.shared.type.AppTheme
 import com.lafin.wvm.api.shared.type.LicenseType
-import io.mockk.every
-import io.mockk.mockk
+import io.mockk.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.mockito.InjectMocks
@@ -25,7 +24,7 @@ class CreateWebAppInteractorTest {
     every { mockRepository.isDuplicateName(any()) } returns false
     every { mockRepository.save(any()) } returns createAndroidApp(1L)
 
-    val result = interactor.create(input)
+    val result = interactor.execute(input)
 
     assertTrue(result.status)
     println(result.message)
@@ -37,7 +36,7 @@ class CreateWebAppInteractorTest {
 
     every { mockRepository.isDuplicateName(any()) } returns true
 
-    val result = interactor.create(input)
+    val result = interactor.execute(input)
 
     assertFalse(result.status)
     println(result.message)
@@ -50,7 +49,7 @@ class CreateWebAppInteractorTest {
     every { mockRepository.isDuplicateName(any()) } returns false
     every { mockRepository.save(any()) } returns createAndroidApp(0L)
 
-    val result = interactor.create(input)
+    val result = interactor.execute(input)
 
     assertFalse(result.status)
     println(result.message)
@@ -63,7 +62,7 @@ class CreateWebAppInteractorTest {
     every { mockRepository.isDuplicateName(any()) } returns false
     every { mockRepository.save(any()) } returns createIosApp(1L)
 
-    val result = interactor.create(input)
+    val result = interactor.execute(input)
 
     assertTrue(result.status)
     println(result.message)
@@ -75,7 +74,7 @@ class CreateWebAppInteractorTest {
 
     every { mockRepository.isDuplicateName(any()) } returns true
 
-    val result = interactor.create(input)
+    val result = interactor.execute(input)
 
     assertFalse(result.status)
     println(result.message)
@@ -88,14 +87,14 @@ class CreateWebAppInteractorTest {
     every { mockRepository.isDuplicateName(any()) } returns false
     every { mockRepository.save(any()) } returns createIosApp(0L)
 
-    val result = interactor.create(input)
+    val result = interactor.execute(input)
 
     assertFalse(result.status)
     println(result.message)
   }
 
-  private fun createAndroidAppInput(): CreateWebAppInteractor.CreateWebAppInput {
-    return CreateWebAppInteractor.CreateWebAppInput(
+  private fun createAndroidAppInput(): CreateWebAppInput {
+    return CreateWebAppInput(
       userId = 1L,
       name = "신규앱",
       initUrl = "http://fmlive2.shop",
@@ -105,8 +104,8 @@ class CreateWebAppInteractorTest {
     )
   }
 
-  private fun createIosAppInput(): CreateWebAppInteractor.CreateWebAppInput {
-    return CreateWebAppInteractor.CreateWebAppInput(
+  private fun createIosAppInput(): CreateWebAppInput {
+    return CreateWebAppInput(
       userId = 1L,
       name = "신규앱",
       initUrl = "http://fmlive2.shop",
