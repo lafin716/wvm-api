@@ -138,7 +138,7 @@ data class WebApp(
     addLog("앱 테마 정보가 변경되었습니다.")
   }
 
-  fun upgradeLicense(licenseType: LicenseType) {
+  fun updateLicense(licenseType: LicenseType) {
     this.licenseType = licenseType
     addLog("서비스 라이센스가 변경되었습니다.")
   }

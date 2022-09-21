@@ -11,9 +11,15 @@ import com.lafin.wvm.api.shared.type.LicenseType
 import org.springframework.stereotype.Service
 
 //@Service
-class CreateWebAppInteractor(
-  private val repository: WebAppRepository
+class CreateWebAppInteractor constructor(
+  _repository: WebAppRepository,
 ): CreateWebAppUseCase<CreateWebAppInput, CreateWebbAppOutput> {
+
+  val repository: WebAppRepository
+
+  init {
+    repository = _repository
+  }
 
   override fun execute(input: CreateWebAppInput): CreateWebbAppOutput {
     input.validate()
@@ -33,6 +39,7 @@ class CreateWebAppInteractor(
       platform = input.platform,
       licenseType = input.licenseType,
     )
+    webApp.create()
 
     val savedApp = repository.save(webApp)
     if (savedApp.id == 0L) {
@@ -64,14 +71,5 @@ data class CreateWebAppInput(
 
 data class CreateWebbAppOutput(
   val result: Boolean,
-) : Output {
-
-  var message: String? = ""
-
-  constructor(result: Boolean, message: String?): this(result) {
-    this.message = message ?: ""
-  }
-
-  override val status: Boolean = result
-
-}
+  val message: String = "",
+) : Output
