@@ -12,9 +12,11 @@ import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.OneToMany
+import javax.persistence.Table
 
 @Entity
-class WebAppEntity (
+@Table(name = "wvm_apps")
+data class WebAppEntity (
   var userId: Long,
   var name: String,
   var initUrl: String,

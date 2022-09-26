@@ -34,7 +34,7 @@ class CreateWebAppInteractor constructor(
 
     if (isDuplicated) {
       return CreateWebbAppOutput(
-        result = false,
+        status = false,
         message = "이미 존재하는 이름입니다.",
       )
     }
@@ -50,18 +50,18 @@ class CreateWebAppInteractor constructor(
     webApp.create()
 
     val savedApp = repository.save(webApp) ?: return CreateWebbAppOutput(
-      result = false,
+      status = false,
       message = "신규 앱을 추가하는 중 문제가 발생하였습니다.",
     )
     if (savedApp.id == 0L) {
       return CreateWebbAppOutput(
-        result = false,
+        status = false,
         message = "신규 앱 추가가 실패하였습니다.",
       )
     }
 
     return CreateWebbAppOutput(
-      result = true,
+      status = true,
       message = "신규 앱이 추가되었습니다.",
     )
   }
@@ -81,6 +81,6 @@ data class CreateWebAppInput(
 }
 
 data class CreateWebbAppOutput(
-  val result: Boolean,
+  val status: Boolean,
   val message: String = "",
 ) : Output

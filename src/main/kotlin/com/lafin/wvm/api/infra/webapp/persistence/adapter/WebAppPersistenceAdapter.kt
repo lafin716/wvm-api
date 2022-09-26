@@ -6,6 +6,7 @@ import com.lafin.wvm.api.domain.webapp.model.WebApp
 import com.lafin.wvm.api.infra.webapp.persistence.convert.WebAppConverter
 import com.lafin.wvm.api.infra.webapp.persistence.repository.WebAppRepository
 import com.lafin.wvm.api.shared.domain.gateway.Order
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Component
 
 @Component
@@ -17,10 +18,12 @@ class WebAppPersistenceAdapter(
   override fun isDuplicateName(condition: WebAppCondition): Boolean {
     condition.userId ?: return false
     condition.name ?: return false
+    condition.platform ?: return false
 
-    return repository.findTopByUserIdAndName(
+    return repository.findTopByUserIdAndNameAndPlatform(
       userId = condition.userId,
       name = condition.name,
+      platform = condition.platform,
     ) != null
   }
 
@@ -33,7 +36,6 @@ class WebAppPersistenceAdapter(
     condition.id ?: return false
     condition.userId ?: return false
     repository.findTopByIdAndUserId(condition.id, condition.userId) ?: return false
-
     repository.deleteById(condition.id)
     return true
   }
@@ -44,10 +46,11 @@ class WebAppPersistenceAdapter(
 
   override fun getList(condition: WebAppCondition): List<WebApp>? {
     condition.userId ?: return listOf()
-    val webApps = repository.findAllByUserId(condition.userId) ?: return listOf()
-    return webApps
-      .map { webApp -> webAppConverter.toAggregate(webApp)}
-      .toList()
+
+    val pagable = PageRequest.of(condition.page, condition.size)
+
+    val webApps = repository.findAllByUserIdOrderByIdDesc(condition.userId, pagable) ?: return listOf()
+    return listOf()
   }
 
   override fun getList(condition: WebAppCondition, order: Order): List<WebApp>? {
