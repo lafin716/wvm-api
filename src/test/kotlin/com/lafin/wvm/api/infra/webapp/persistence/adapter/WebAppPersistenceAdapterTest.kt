@@ -95,6 +95,30 @@ class WebAppPersistenceAdapterTest (
     assertNotNull(app)
   }
 
+  @Test
+  fun 앱_목록_검색() {
+    val appCount = 100
+    bulkSaveApp(appCount)
+    val apps = adapter.getList(WebAppCondition(
+      userId = 1L,
+      page = 1,
+      size = 10,
+    ))
+
+    println(apps)
+    assertNotNull(apps)
+    assertTrue(apps.size == appCount)
+  }
+
+  private fun bulkSaveApp(count: Int = 1, platform: AppPlatform = AppPlatform.ANDROID): Unit {
+    for (i in 0..count) {
+      adapter.save(createApp(
+        name = "앱${i}",
+        platform = platform,
+      ))
+    }
+  }
+
   private fun createAndroidApp(): WebApp {
     return createApp(platform = AppPlatform.ANDROID)
   }

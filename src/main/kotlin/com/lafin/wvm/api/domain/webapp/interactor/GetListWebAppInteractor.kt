@@ -6,6 +6,7 @@ import com.lafin.wvm.api.domain.webapp.model.WebApp
 import com.lafin.wvm.api.shared.domain.io.Input
 import com.lafin.wvm.api.shared.domain.io.Output
 import com.lafin.wvm.api.shared.domain.UseCase
+import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 
 @Service
@@ -47,5 +48,5 @@ data class GetListWebAppInput(
 data class GetListWebAppOutput(
   val status: Boolean,
   val message: String = "",
-  val app: List<WebApp>? = null,
+  val app: Page<List<WebApp>> = Page.empty(),
 ) : Output

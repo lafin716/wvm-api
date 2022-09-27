@@ -4,8 +4,10 @@ import com.lafin.wvm.api.domain.webapp.gateway.WebAppCondition
 import com.lafin.wvm.api.domain.webapp.gateway.WebAppPersistence
 import com.lafin.wvm.api.domain.webapp.model.WebApp
 import com.lafin.wvm.api.infra.webapp.persistence.convert.WebAppConverter
+import com.lafin.wvm.api.infra.webapp.persistence.entity.WebAppEntity
 import com.lafin.wvm.api.infra.webapp.persistence.repository.WebAppRepository
 import com.lafin.wvm.api.shared.domain.gateway.Order
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Component
 
@@ -40,20 +42,14 @@ class WebAppPersistenceAdapter(
     return true
   }
 
-  override fun getList(): List<WebApp>? {
-    TODO("Not yet implemented")
+  override fun getList(condition: WebAppCondition): Page<List<WebApp>> {
+    condition.userId ?: return Page.empty()
+    val pageable = PageRequest.of(condition.page, condition.size)
+    val webApps = repository.findAllByUserIdOrderByIdDesc(condition.userId, pageable)
+    return  Page.empty()
   }
 
-  override fun getList(condition: WebAppCondition): List<WebApp>? {
-    condition.userId ?: return listOf()
-
-    val pagable = PageRequest.of(condition.page, condition.size)
-
-    val webApps = repository.findAllByUserIdOrderByIdDesc(condition.userId, pagable) ?: return listOf()
-    return listOf()
-  }
-
-  override fun getList(condition: WebAppCondition, order: Order): List<WebApp>? {
+  override fun getList(condition: WebAppCondition, order: Order): Page<List<WebApp>> {
     TODO("Not yet implemented")
   }
 
