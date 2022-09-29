@@ -5,8 +5,10 @@ import java.time.LocalDateTime
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
+import javax.persistence.Table
 
 @Entity
+@Table(name = "wvm_app_changelogs")
 class ChangeLogEntity(
   _appId: Long,
   _userId: Long,

@@ -48,5 +48,5 @@ data class GetListWebAppInput(
 data class GetListWebAppOutput(
   val status: Boolean,
   val message: String = "",
-  val app: Page<List<WebApp>> = Page.empty(),
+  val app: Page<WebApp> = Page.empty(),
 ) : Output

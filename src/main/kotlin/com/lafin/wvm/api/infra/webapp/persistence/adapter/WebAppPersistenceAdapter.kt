@@ -9,6 +9,7 @@ import com.lafin.wvm.api.infra.webapp.persistence.repository.WebAppRepository
 import com.lafin.wvm.api.shared.domain.gateway.Order
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Component
 
 @Component
@@ -42,14 +43,19 @@ class WebAppPersistenceAdapter(
     return true
   }
 
-  override fun getList(condition: WebAppCondition): Page<List<WebApp>> {
+  override fun getList(condition: WebAppCondition): Page<WebApp> {
     condition.userId ?: return Page.empty()
-    val pageable = PageRequest.of(condition.page, condition.size)
-    val webApps = repository.findAllByUserIdOrderByIdDesc(condition.userId, pageable)
-    return  Page.empty()
+
+    val pageable = PageRequest.of(condition.page, condition.size, Sort.by(Sort.Direction.DESC, "id"))
+    val webApps = repository.findAllByUserIdAndPlatform(condition.userId, condition.platform, pageable)
+    val domainWebApps = webApps?.map {
+      webAppEntity -> webAppConverter.toAggregate(webAppEntity)
+    }
+
+    return domainWebApps ?: Page.empty()
   }
 
-  override fun getList(condition: WebAppCondition, order: Order): Page<List<WebApp>> {
+  override fun getList(condition: WebAppCondition, order: Order): Page<WebApp> {
     TODO("Not yet implemented")
   }
 

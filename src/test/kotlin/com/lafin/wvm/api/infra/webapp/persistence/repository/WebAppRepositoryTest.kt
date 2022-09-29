@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import java.time.LocalDateTime
 
 @DataJpaTest
@@ -46,10 +47,10 @@ class WebAppRepositoryTest(
   @Test
   fun Pageable테스트()
   {
-    bulkSaveApp(100)
+//    bulkSaveApp(100)
 
-    val pageable = PageRequest.of(1, 10)
-    val result = repository.findAllByUserIdOrderByIdDesc(1L, pageable);
+    val pageable = PageRequest.of(1, 10, Sort.by(Sort.Direction.DESC, "id"))
+    val result = repository.findAllByUserIdAndPlatform(1L, null, pageable);
     println(result)
   }
 
