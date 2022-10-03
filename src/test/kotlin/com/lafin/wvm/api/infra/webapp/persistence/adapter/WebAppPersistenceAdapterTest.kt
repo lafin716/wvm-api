@@ -5,7 +5,6 @@ import com.lafin.wvm.api.domain.webapp.model.WebApp
 import com.lafin.wvm.api.infra.webapp.persistence.convert.WebAppConverter
 import com.lafin.wvm.api.infra.webapp.persistence.repository.WebAppRepository
 import com.lafin.wvm.api.shared.type.AppPlatform
-import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -14,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 
 @DataJpaTest
-@DisplayName("웹앱_어댑터")
+@DisplayName("웹앱_퍼시스턴스_어댑터")
 class WebAppPersistenceAdapterTest (
   @Autowired val repository: WebAppRepository
 ) {
@@ -84,18 +83,6 @@ class WebAppPersistenceAdapterTest (
   }
 
   @Test
-  fun 단일_앱_검색() {
-    adapter.save(createAndroidApp())
-    val app = adapter.getOne(WebAppCondition(
-      userId = 1L,
-      id = 1L,
-    ))
-
-    println(app)
-    assertNotNull(app)
-  }
-
-  @Test
   fun 앱_목록_검색() {
     val appCount = 100
     bulkSaveApp(appCount)
@@ -107,6 +94,18 @@ class WebAppPersistenceAdapterTest (
 
     println(apps)
     assertNotNull(apps)
+  }
+
+  @Test
+  fun 단일_앱_검색() {
+    adapter.save(createAndroidApp())
+    val app = adapter.getOne(WebAppCondition(
+      id = 1L,
+      userId = 1L,
+    ))
+
+    println(app)
+    assertNotNull(app!!)
   }
 
   private fun bulkSaveApp(count: Int = 1, platform: AppPlatform = AppPlatform.ANDROID): Unit {
@@ -132,6 +131,7 @@ class WebAppPersistenceAdapterTest (
     platform: AppPlatform
   ): WebApp {
     return WebApp(
+      id = 1L,
       userId = 1L,
       name = name,
       initUrl = initUrl,

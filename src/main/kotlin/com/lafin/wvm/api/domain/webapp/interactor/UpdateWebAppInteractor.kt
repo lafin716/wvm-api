@@ -2,7 +2,7 @@ package com.lafin.wvm.api.domain.webapp.interactor
 
 import com.lafin.wvm.api.domain.webapp.gateway.WebAppCondition
 import com.lafin.wvm.api.domain.webapp.gateway.WebAppPersistence
-import com.lafin.wvm.api.domain.webapp.usecase.UpdateWebAppUseCase
+import com.lafin.wvm.api.domain.webapp.usecase.UpdateUserUseCase
 import com.lafin.wvm.api.shared.domain.io.Input
 import com.lafin.wvm.api.shared.domain.io.Output
 import com.lafin.wvm.api.shared.type.AppTheme
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 @Service
 class UpdateWebAppInteractor(
   _repository: WebAppPersistence,
-) : UpdateWebAppUseCase<UpdateWebAppInput, UpdateWebAppOutput> {
+) : UpdateUserUseCase<UpdateWebAppInput, UpdateWebAppOutput> {
 
   val repository: WebAppPersistence
 

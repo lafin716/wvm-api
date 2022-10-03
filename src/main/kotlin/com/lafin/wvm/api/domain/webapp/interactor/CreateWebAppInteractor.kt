@@ -5,7 +5,7 @@ import com.lafin.wvm.api.domain.webapp.gateway.WebAppPersistence
 import com.lafin.wvm.api.domain.webapp.model.WebApp
 import com.lafin.wvm.api.shared.domain.io.Input
 import com.lafin.wvm.api.shared.domain.io.Output
-import com.lafin.wvm.api.domain.webapp.usecase.CreateWebAppUseCase
+import com.lafin.wvm.api.domain.webapp.usecase.CreateUserUseCase
 import com.lafin.wvm.api.shared.type.AppPlatform
 import com.lafin.wvm.api.shared.type.AppTheme
 import com.lafin.wvm.api.shared.type.LicenseType
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service
 @Service
 class CreateWebAppInteractor constructor(
   _repository: WebAppPersistence,
-) : CreateWebAppUseCase<CreateWebAppInput, CreateWebbAppOutput> {
+) : CreateUserUseCase<CreateWebAppInput, CreateWebbAppOutput> {
 
   val repository: WebAppPersistence
 

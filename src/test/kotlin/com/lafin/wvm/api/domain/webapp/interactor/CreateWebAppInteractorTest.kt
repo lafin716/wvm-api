@@ -1,5 +1,6 @@
 package com.lafin.wvm.api.domain.webapp.interactor
 
+import com.lafin.wvm.api.domain.webapp.gateway.UserPersistence
 import com.lafin.wvm.api.domain.webapp.gateway.WebAppPersistence
 import com.lafin.wvm.api.domain.webapp.model.WebApp
 import com.lafin.wvm.api.shared.type.AppPlatform

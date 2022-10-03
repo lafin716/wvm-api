@@ -1,10 +1,10 @@
 package com.lafin.wvm.api.infra.webapp.persistence.adapter
 
 import com.lafin.wvm.api.domain.webapp.gateway.WebAppCondition
+import com.lafin.wvm.api.domain.webapp.gateway.UserPersistence
 import com.lafin.wvm.api.domain.webapp.gateway.WebAppPersistence
 import com.lafin.wvm.api.domain.webapp.model.WebApp
 import com.lafin.wvm.api.infra.webapp.persistence.convert.WebAppConverter
-import com.lafin.wvm.api.infra.webapp.persistence.entity.WebAppEntity
 import com.lafin.wvm.api.infra.webapp.persistence.repository.WebAppRepository
 import com.lafin.wvm.api.shared.domain.gateway.Order
 import org.springframework.data.domain.Page

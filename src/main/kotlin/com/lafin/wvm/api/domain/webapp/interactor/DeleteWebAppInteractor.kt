@@ -2,7 +2,7 @@ package com.lafin.wvm.api.domain.webapp.interactor
 
 import com.lafin.wvm.api.domain.webapp.gateway.WebAppCondition
 import com.lafin.wvm.api.domain.webapp.gateway.WebAppPersistence
-import com.lafin.wvm.api.domain.webapp.usecase.DeleteWebAppUseCase
+import com.lafin.wvm.api.domain.webapp.usecase.DeleteUserUseCase
 import com.lafin.wvm.api.shared.domain.io.Input
 import com.lafin.wvm.api.shared.domain.io.Output
 import org.springframework.stereotype.Service
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 @Service
 class DeleteWebAppInteractor(
   _repository: WebAppPersistence
-) : DeleteWebAppUseCase<DeleteWebAppInput, DeleteWebAppOutput> {
+) : DeleteUserUseCase<DeleteWebAppInput, DeleteWebAppOutput> {
 
   val repository: WebAppPersistence
 

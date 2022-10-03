@@ -54,6 +54,14 @@ class WebAppRepositoryTest(
     println(result)
   }
 
+  @Test
+  fun 단일_검색() {
+    saveApp()
+    val app = repository.findById(1L)
+
+    println(app)
+  }
+
   fun bulkSaveApp(count: Int) {
     for (i in 1..count) {
       saveApp()

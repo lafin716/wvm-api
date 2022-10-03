@@ -4,7 +4,6 @@ import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 plugins {
   id("org.springframework.boot") version "2.7.3"
   id("io.spring.dependency-management") version "1.0.13.RELEASE"
-  id("org.jetbrains.kotlin.plugin.allopen") version "1.3.61"
 
   val kotlinVersion = "1.6.21"
   kotlin("jvm") version kotlinVersion
