@@ -3,7 +3,7 @@ package com.lafin.wvm.api.shared.data
 import java.util.regex.Pattern
 
 data class Password(
-  private val value: String,
+  val value: String,
 ) {
 
   val minLength = 8
@@ -48,7 +48,7 @@ data class Password(
     val preFilterRegex = "\\W"
     val charFilterRegex = "[!@#$%^*+=-]"
 
-    for (i in 0..value.length) {
+    for (i in 0 until value.length) {
       val char = value[i].toString()
       if (execute(char, preFilterRegex)) {
         if (!execute(char, charFilterRegex)) {

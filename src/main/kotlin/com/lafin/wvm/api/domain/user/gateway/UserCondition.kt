@@ -5,7 +5,7 @@ import com.lafin.wvm.api.shared.domain.gateway.Condition
 import com.lafin.wvm.api.shared.type.AppPlatform
 
 data class UserCondition (
-  val id: Long? = 0L,
+  val id: Long? = null,
   val email: Email? = null,
   val name: String? = null,
   val page: Int = 0,

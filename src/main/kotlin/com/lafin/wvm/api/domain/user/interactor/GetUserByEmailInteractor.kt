@@ -4,48 +4,45 @@ import com.lafin.wvm.api.domain.user.model.User
 import com.lafin.wvm.api.domain.webapp.gateway.UserCondition
 import com.lafin.wvm.api.domain.webapp.gateway.UserPersistence
 import com.lafin.wvm.api.domain.webapp.model.WebApp
+import com.lafin.wvm.api.shared.data.Email
 import com.lafin.wvm.api.shared.domain.io.Input
 import com.lafin.wvm.api.shared.domain.io.Output
 import com.lafin.wvm.api.shared.domain.UseCase
 import org.springframework.stereotype.Service
 
 @Service
-class GetUserInteractor(
+class GetUserByEmailInteractor(
   _repository: UserPersistence,
-) : UseCase<GetUserInput, GetUserOutput> {
+) : UseCase<GetUserByEmailInput, GetUserByEmailOutput> {
 
-  val repository: UserPersistence
-
+  final val repository: UserPersistence
   init {
     repository = _repository
   }
 
-  override fun execute(input: GetUserInput): GetUserOutput {
+  override fun execute(input: GetUserByEmailInput): GetUserByEmailOutput {
     input.validate()
 
     val user = repository.getOne(
       UserCondition(
-        id = input.id,
+        email = input.email,
       )
-    ) ?: return GetUserOutput(false, "회원 정보가 없습니다.")
+    ) ?: return GetUserByEmailOutput(false, "회원 정보가 없습니다.")
 
-    return GetUserOutput(true, "", user)
+    return GetUserByEmailOutput(true, "", user)
   }
 }
 
-data class GetUserInput(
-  val id: Long,
+data class GetUserByEmailInput(
+  val email: Email,
 ) : Input {
   override fun validate(): Boolean {
-    if (id <= 0L) {
-      throw IllegalArgumentException("유효한 앱 고유번호가 없습니다.")
-    }
-
+    email.validate()
     return true
   }
 }
 
-data class GetUserOutput(
+data class GetUserByEmailOutput(
   val status: Boolean,
   val message: String = "",
   val user: User? = null,

@@ -19,7 +19,7 @@ data class User(
   var removedAt: LocalDateTime? = null,
   var bannedAt: LocalDateTime? = null,
   var lastLoggedIn: LocalDateTime? = null,
-  val id: Long = 0L,
+  val id: Long? = null,
 ) : Aggregate {
 
   fun registed() {

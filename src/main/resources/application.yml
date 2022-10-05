@@ -3,3 +3,9 @@ spring:
     active: local
 server:
   port: 80
+security:
+  jwt:
+    issuer: lafin
+    secret: lafin1234
+    expireTime: 7200000 # 2시간
+    refreshTime: 172800000 # 2일

@@ -32,6 +32,8 @@ dependencies {
   implementation("org.jetbrains.kotlin:kotlin-reflect")
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
   implementation("com.querydsl:querydsl-jpa")
+  implementation("io.jsonwebtoken:jjwt:0.9.1")
+  annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
   kapt("com.querydsl:querydsl-apt:$querydslVersion:jpa")
   kapt("org.springframework.boot:spring-boot-configuration-processor")
 
