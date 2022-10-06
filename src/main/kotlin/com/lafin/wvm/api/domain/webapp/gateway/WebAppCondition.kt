@@ -8,6 +8,16 @@ data class WebAppCondition (
   val userId: Long? = 0L,
   val name: String? = null,
   val platform: AppPlatform? = null,
-  val page: Int = 0,
-  val size: Int = 10,
-) : Condition
+  var page: Int = 0,
+  var size: Int = 10,
+) : Condition {
+  init {
+    if (page < 0) {
+      page = 0
+    }
+
+    if (size < 0) {
+      size = 10
+    }
+  }
+}

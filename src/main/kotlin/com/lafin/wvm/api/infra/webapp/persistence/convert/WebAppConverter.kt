@@ -30,6 +30,7 @@ class WebAppConverter : Convertable<WebAppEntity, WebApp> {
 
   override fun toEntity(aggregate: WebApp): WebAppEntity {
     return WebAppEntity(
+      id = aggregate.id,
       userId = aggregate.userId,
       name = aggregate.name,
       initUrl = aggregate.initUrl,

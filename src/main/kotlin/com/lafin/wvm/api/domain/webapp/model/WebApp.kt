@@ -10,11 +10,11 @@ import com.lafin.wvm.api.shared.type.LicenseType
 import java.time.LocalDateTime
 
 data class WebApp (
+  val id: Long? = null,
   val userId: Long,
   var name: String,
   var initUrl: String,
   var platform: AppPlatform,
-  val id: Long? = null,
   var theme: AppTheme = AppTheme.DEFAULT,
   var licenseType: LicenseType = LicenseType.FREE,
   var status: WebAppStatus = WebAppStatus.CREATED,

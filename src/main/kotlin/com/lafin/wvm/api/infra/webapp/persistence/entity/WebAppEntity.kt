@@ -17,6 +17,9 @@ import javax.persistence.Table
 @Entity
 @Table(name = "wvm_apps")
 data class WebAppEntity (
+  @Id
+  @GeneratedValue
+  var id: Long? = null,
   var userId: Long,
   var name: String,
   var initUrl: String,
@@ -32,10 +35,6 @@ data class WebAppEntity (
   var lastDeployedAt: LocalDateTime?,
   var deletedAt: LocalDateTime?,
 ) : PersistEntity {
-
-  @Id
-  @GeneratedValue
-  var id: Long? = null
 
   @OneToMany
   var logs: MutableList<ChangeLogEntity>? = null
