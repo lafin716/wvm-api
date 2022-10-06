@@ -15,6 +15,8 @@ data class WebApp (
   var name: String,
   var initUrl: String,
   var platform: AppPlatform,
+  var icon: String? = "",
+  var splash: String? = "",
   var theme: AppTheme = AppTheme.DEFAULT,
   var licenseType: LicenseType = LicenseType.FREE,
   var status: WebAppStatus = WebAppStatus.CREATED,
@@ -37,7 +39,6 @@ data class WebApp (
     status = WebAppStatus.READY
     buildStatus = BuildStatus.PREPARED
     updatedAt = LocalDateTime.now()
-    addLog("빌드 준비가 완료 되었습니다.")
   }
 
   fun running() {
@@ -148,6 +149,27 @@ data class WebApp (
       userId = adminUserId,
       message = message,
     )
+  }
+
+  fun updateBuildState() {
+    if (isBuildable()) {
+      buildStatus = BuildStatus.PREPARED
+      updatedAt = LocalDateTime.now()
+      addLog("빌드 준비가 완료 되었습니다.")
+    }
+  }
+
+  private fun isActive(): Boolean {
+    return status == WebAppStatus.CREATED
+        || status == WebAppStatus.RUNNING
+  }
+
+  private fun isBuildable(): Boolean {
+    return isActive()
+        && name.isNotBlank()
+        && initUrl.isNotBlank()
+        && icon?.isNotBlank() ?: false
+        && splash?.isNotBlank() ?: false
   }
 
   private fun addLog(message: String, userId: Long = this.userId) {

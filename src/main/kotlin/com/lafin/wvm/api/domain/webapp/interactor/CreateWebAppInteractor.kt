@@ -2,6 +2,7 @@ package com.lafin.wvm.api.domain.webapp.interactor
 
 import com.lafin.wvm.api.domain.webapp.gateway.WebAppCondition
 import com.lafin.wvm.api.domain.webapp.gateway.WebAppPersistence
+import com.lafin.wvm.api.domain.webapp.gateway.WebAppStorage
 import com.lafin.wvm.api.domain.webapp.model.WebApp
 import com.lafin.wvm.api.shared.domain.io.Input
 import com.lafin.wvm.api.shared.domain.io.Output
@@ -10,17 +11,13 @@ import com.lafin.wvm.api.shared.type.AppPlatform
 import com.lafin.wvm.api.shared.type.AppTheme
 import com.lafin.wvm.api.shared.type.LicenseType
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 
 @Service
 class CreateWebAppInteractor constructor(
-  _repository: WebAppPersistence,
+  private val repository: WebAppPersistence,
+  private val storage: WebAppStorage,
 ) : CreateUserUseCase<CreateWebAppInput, CreateWebbAppOutput> {
-
-  val repository: WebAppPersistence
-
-  init {
-    repository = _repository
-  }
 
   override fun execute(input: CreateWebAppInput): CreateWebbAppOutput {
     input.validate()
@@ -71,6 +68,8 @@ data class CreateWebAppInput(
   val userId: Long,
   val name: String,
   val initUrl: String,
+  val icon: MultipartFile?,
+  val splash: MultipartFile?,
   val theme: AppTheme,
   val platform: AppPlatform,
   val licenseType: LicenseType,
