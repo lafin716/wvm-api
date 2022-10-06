@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.multipart.MultipartFile
 
 @RestController
 class WebAppController(
@@ -40,8 +42,13 @@ class WebAppController(
   }
 
   @PostMapping("/app")
-  fun add(@RequestBody request: WebAppAddRequest, auth: Authentication): ResponseEntity<WebAppAddResponse> {
-    return adapter.add(request, auth.principal as String)
+  fun add(
+    @RequestPart request: WebAppAddRequest,
+    @RequestPart(required = false) icon: MultipartFile,
+    @RequestPart(required = false) splash: MultipartFile,
+    auth: Authentication
+  ): ResponseEntity<WebAppAddResponse> {
+    return adapter.add(request, icon, splash, auth.principal as String)
   }
 
   @PutMapping("/app/{id}")

@@ -17,6 +17,7 @@ import com.lafin.wvm.api.shared.type.LicenseType
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 
 @Service
 class WebAppInteractorAdapter(
@@ -50,7 +51,7 @@ class WebAppInteractorAdapter(
     ))
   }
 
-  fun add(request: WebAppAddRequest, email: String): ResponseEntity<WebAppAddResponse> {
+  fun add(request: WebAppAddRequest, icon: MultipartFile, splash: MultipartFile, email: String): ResponseEntity<WebAppAddResponse> {
     val user = getUser(email)
 
     val theme = try {
@@ -75,6 +76,8 @@ class WebAppInteractorAdapter(
       userId = user.id!!,
       name = request.name,
       initUrl = request.initUrl,
+      icon = icon,
+      splash = splash,
       theme = theme,
       platform = platform,
       licenseType = licenseType,
