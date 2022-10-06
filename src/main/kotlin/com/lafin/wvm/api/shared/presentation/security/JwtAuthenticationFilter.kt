@@ -1,5 +1,7 @@
 package com.lafin.wvm.api.shared.presentation.security
 
+import antlr.StringUtils
+import org.apache.logging.log4j.util.Strings
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
 import javax.servlet.FilterChain
@@ -17,8 +19,14 @@ class JwtAuthenticationFilter(
     chain: FilterChain
   ) {
     // 헤더에 Authorization이 있다면 가져온다.
-    val authorizationHeader: String = request.getHeader("Authorization") ?: return chain.doFilter(request, response)
+    val authorizationHeader: String = request.getHeader("Authorization") ?: ""
+    if (Strings.isBlank(authorizationHeader)) {
+      return chain.doFilter(request, response)
+    }
     // Bearer타입 토큰이 있을 때 가져온다.
+    if (!authorizationHeader.contains("Bearer ")) {
+      return chain.doFilter(request, response)
+    }
     val token = authorizationHeader.substring("Bearer ".length) ?: return chain.doFilter(request, response)
 
     // 토큰 검증

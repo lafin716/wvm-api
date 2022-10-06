@@ -1,6 +1,5 @@
 package com.lafin.wvm.api.presentation.user.adapter
 
-import com.lafin.wvm.api.domain.user.model.User
 import com.lafin.wvm.api.domain.webapp.interactor.GetUserByEmailInput
 import com.lafin.wvm.api.domain.webapp.interactor.GetUserByEmailInteractor
 import com.lafin.wvm.api.presentation.user.vo.DefaultUserDetails

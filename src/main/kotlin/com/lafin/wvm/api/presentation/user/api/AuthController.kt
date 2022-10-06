@@ -15,18 +15,17 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-@Controller
 @RestController
-class UserController(
+class AuthController(
   private val adapter: UserInteractorAdapter
 ) : ApiV1Controller {
 
-  @PostMapping("/user/signup")
+  @PostMapping("/auth/signup")
   fun signUp(@RequestBody request: SignUpRequest) : ResponseEntity<SignUpResponse> {
     return ResponseEntity.ok(adapter.signUp(request))
   }
 
-  @PostMapping("/user/signin")
+  @PostMapping("/auth/signin")
   fun signIn(@RequestBody request: SignInRequest) : ResponseEntity<SignInResponse> {
     return ResponseEntity.ok(adapter.signIn(request))
   }
