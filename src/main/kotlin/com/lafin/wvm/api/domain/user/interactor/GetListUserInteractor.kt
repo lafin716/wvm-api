@@ -11,14 +11,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class GetListUserInteractor(
-  _repository: UserPersistence,
+  private val repository: UserPersistence,
 ) : UseCase<GetListUserInput, GetListUserOutput> {
-
-  val repository: UserPersistence
-
-  init {
-    repository = _repository
-  }
 
   override fun execute(input: GetListUserInput): GetListUserOutput {
     input.validate()
@@ -27,7 +21,7 @@ class GetListUserInteractor(
       UserCondition()
     )
 
-    return if (user.isEmpty) {
+    return if (user.isEmpty()) {
       GetListUserOutput(false, "회원 정보가 없습니다.")
     } else {
       GetListUserOutput(true, "", user)
@@ -50,5 +44,5 @@ data class GetListUserInput(
 data class GetListUserOutput(
   val status: Boolean,
   val message: String = "",
-  val app: Page<User> = Page.empty(),
+  val app: List<User> = listOf(),
 ) : Output

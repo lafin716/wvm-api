@@ -1,13 +1,9 @@
 package com.lafin.wvm.api.shared.presentation.security
 
-import antlr.StringUtils
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.lafin.wvm.api.shared.presentation.response.ErrorResponse
+import com.lafin.wvm.api.shared.presentation.response.responseError
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.SignatureException
 import org.apache.logging.log4j.util.Strings
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
 import javax.servlet.FilterChain
@@ -43,27 +39,14 @@ class JwtAuthenticationFilter(
       }
       chain.doFilter(request, response)
     } catch (e: AccessDeniedException) {
-      error(response, e.message ?: "인증 정보가 없습니다.")
+      responseError(response, e.message ?: "인증 정보가 없습니다.")
     } catch (e: ExpiredJwtException) {
-      error(response, e.message ?: "토큰이 만료되었습니다.")
+      responseError(response, e.message ?: "토큰이 만료되었습니다.")
     } catch (e: SignatureException) {
-      error(response, e.message ?: "유효하지 않은 토큰입니다.")
+      responseError(response, e.message ?: "유효하지 않은 토큰입니다.")
     } catch (e: Exception) {
       e.printStackTrace()
-      error(response, e.message ?: "알 수 없는 에러입니다.")
+      responseError(response, e.message ?: "알 수 없는 에러입니다.")
     }
-  }
-
-  fun error(response: HttpServletResponse, message: String) {
-    val errorResponse = ErrorResponse(message = message)
-    response.status = HttpStatus.UNAUTHORIZED.value()
-    response.contentType = MediaType.APPLICATION_JSON_VALUE
-    response.characterEncoding = "UTF-8"
-    response.getWriter().write(convertObjectToJson(errorResponse))
-  }
-
-  fun convertObjectToJson(obj: Any): String {
-    val mapper = ObjectMapper()
-    return mapper.writeValueAsString(obj)
   }
 }

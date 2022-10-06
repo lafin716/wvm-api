@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page
 interface CrudRepository<T: Aggregate, in C: Condition, in O: Order> {
   fun save(aggregate: T): T?
   fun delete(condition: C): Boolean
-  fun getList(condition: C): Page<T>
-  fun getList(condition: C, order: O): Page<T>
+  fun getList(condition: C): List<T>
+  fun getList(condition: C, order: O): List<T>
   fun getOne(condition: C): T?
 }

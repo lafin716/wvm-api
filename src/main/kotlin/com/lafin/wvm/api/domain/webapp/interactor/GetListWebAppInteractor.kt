@@ -11,14 +11,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class GetListWebAppInteractor(
-  _repository: WebAppPersistence,
+  private val repository: WebAppPersistence,
 ) : UseCase<GetListWebAppInput, GetListWebAppOutput> {
-
-  val repository: WebAppPersistence
-
-  init {
-    repository = _repository
-  }
 
   override fun execute(input: GetListWebAppInput): GetListWebAppOutput {
     input.validate()
@@ -27,7 +21,7 @@ class GetListWebAppInteractor(
       WebAppCondition(
         userId = input.userId
       )
-    ) ?: return GetListWebAppOutput(false, "앱 정보가 없습니다.")
+    )
 
     return GetListWebAppOutput(true, "앱 정보가 조회되었습니다.", webApp)
   }
@@ -48,5 +42,5 @@ data class GetListWebAppInput(
 data class GetListWebAppOutput(
   val status: Boolean,
   val message: String = "",
-  val app: Page<WebApp> = Page.empty(),
+  val app: List<WebApp> = listOf(),
 ) : Output

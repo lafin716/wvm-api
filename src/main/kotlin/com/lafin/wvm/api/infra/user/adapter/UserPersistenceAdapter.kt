@@ -36,11 +36,11 @@ class UserPersistenceAdapter(
     TODO("Not yet implemented")
   }
 
-  override fun getList(condition: UserCondition): Page<User> {
+  override fun getList(condition: UserCondition): List<User> {
     TODO("Not yet implemented")
   }
 
-  override fun getList(condition: UserCondition, order: Order): Page<User> {
+  override fun getList(condition: UserCondition, order: Order): List<User> {
     TODO("Not yet implemented")
   }
 

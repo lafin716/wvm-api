@@ -7,6 +7,7 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwt
 import io.jsonwebtoken.JwtParser
 import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationProvider
@@ -64,8 +65,11 @@ class JwtProvider(
         .setSigningKey(secretKey)
         .parseClaimsJws(token)
         .body
+    } catch (e: MalformedJwtException) {
+      throw Exception("유효하지 않은 토큰입니다. :: ${token}")
     } catch (e: Exception) {
-      throw Exception("토큰이 위조되었습니다.")
+      e.printStackTrace()
+      throw Exception("토큰 위변조가 감지되었습니다. :: ${token}")
     }
   }
 

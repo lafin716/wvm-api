@@ -6,6 +6,7 @@ import com.lafin.wvm.api.domain.webapp.gateway.WebAppPersistence
 import com.lafin.wvm.api.domain.webapp.model.WebApp
 import com.lafin.wvm.api.infra.webapp.persistence.convert.WebAppConverter
 import com.lafin.wvm.api.infra.webapp.persistence.repository.WebAppRepository
+import com.lafin.wvm.api.infra.webapp.persistence.repository.custom.WebAppRepositoryCustom
 import com.lafin.wvm.api.shared.domain.gateway.Order
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component
 @Component
 class WebAppPersistenceAdapter(
   val repository: WebAppRepository,
+  val dsl: WebAppRepositoryCustom,
   val webAppConverter: WebAppConverter,
 ) : WebAppPersistence {
 
@@ -43,19 +45,18 @@ class WebAppPersistenceAdapter(
     return true
   }
 
-  override fun getList(condition: WebAppCondition): Page<WebApp> {
-    condition.userId ?: return Page.empty()
+  override fun getList(condition: WebAppCondition): List<WebApp> {
+    condition.userId ?: return listOf()
 
-    val pageable = PageRequest.of(condition.page, condition.size, Sort.by(Sort.Direction.DESC, "id"))
-    val webApps = repository.findAllByUserIdAndPlatform(condition.userId, condition.platform, pageable)
+    val webApps = dsl.getList(condition)
     val domainWebApps = webApps?.map {
       webAppEntity -> webAppConverter.toAggregate(webAppEntity)
     }
 
-    return domainWebApps ?: Page.empty()
+    return domainWebApps ?: listOf()
   }
 
-  override fun getList(condition: WebAppCondition, order: Order): Page<WebApp> {
+  override fun getList(condition: WebAppCondition, order: Order): List<WebApp> {
     TODO("Not yet implemented")
   }
 

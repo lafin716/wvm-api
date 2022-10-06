@@ -12,5 +12,5 @@ import org.springframework.stereotype.Repository
 interface WebAppRepository : JpaRepository<WebAppEntity, Long>{
   fun findTopByIdAndUserId(id: Long, userId: Long): WebAppEntity?
   fun findTopByUserIdAndNameAndPlatform(userId: Long, name: String, platform: AppPlatform): WebAppEntity?
-  fun findAllByUserIdAndPlatform(userId: Long, platform: AppPlatform?, pageable: Pageable): Page<WebAppEntity>?
+  fun findAllByUserIdAndPlatform(userId: Long, platform: AppPlatform, pageable: Pageable): Page<WebAppEntity>?
 }
