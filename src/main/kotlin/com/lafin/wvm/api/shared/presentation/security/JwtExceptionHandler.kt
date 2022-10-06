@@ -21,9 +21,6 @@ class JwtExceptionHandler : AuthenticationEntryPoint {
 
     response?.contentType = MediaType.APPLICATION_JSON_VALUE
     response?.status = HttpStatus.UNAUTHORIZED.value()
-
-    val os: OutputStream = response?.outputStream as OutputStream
-    val objectMapper = ObjectMapper()
-    objectMapper.writeValue(os, "Unauthorized")
+    response?.sendError(HttpStatus.UNAUTHORIZED.value(), "ddd")
   }
 }

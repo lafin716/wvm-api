@@ -59,10 +59,14 @@ class JwtProvider(
   }
 
   fun getAllClaims(token: String): Claims {
-    return Jwts.parser()
-      .setSigningKey(secretKey)
-      .parseClaimsJws(token)
-      .body
+    return try {
+      Jwts.parser()
+        .setSigningKey(secretKey)
+        .parseClaimsJws(token)
+        .body
+    } catch (e: Exception) {
+      throw Exception("토큰이 위조되었습니다.")
+    }
   }
 
   fun validateToken(token: String) : Boolean {
