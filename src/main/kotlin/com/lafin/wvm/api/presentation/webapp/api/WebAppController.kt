@@ -52,10 +52,12 @@ class WebAppController(
   @PutMapping("/app/{id}")
   fun update(
     @PathVariable(name = "id") id: Long,
-    @RequestBody request: WebAppUpdateRequest,
+    @RequestPart request: WebAppUpdateRequest,
+    @RequestPart(required = false) icon: MultipartFile?,
+    @RequestPart(required = false) splash: MultipartFile?,
     auth: Authentication
   ): ResponseEntity<WebAppUpdateResponse> {
-    return adapter.update(id, auth.principal as String, request)
+    return adapter.update(id, icon, splash, auth.principal as String, request)
   }
 
   @DeleteMapping("/app/{id}")

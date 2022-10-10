@@ -2,16 +2,19 @@ package com.lafin.wvm.api.domain.webapp.interactor
 
 import com.lafin.wvm.api.domain.webapp.gateway.WebAppCondition
 import com.lafin.wvm.api.domain.webapp.gateway.WebAppPersistence
+import com.lafin.wvm.api.domain.webapp.gateway.WebAppStorage
 import com.lafin.wvm.api.domain.webapp.usecase.UpdateUserUseCase
 import com.lafin.wvm.api.shared.domain.io.Input
 import com.lafin.wvm.api.shared.domain.io.Output
 import com.lafin.wvm.api.shared.type.AppTheme
 import com.lafin.wvm.api.shared.type.LicenseType
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 
 @Service
 class UpdateWebAppInteractor(
   private val repository: WebAppPersistence,
+  private val storage: WebAppStorage,
 ) : UpdateUserUseCase<UpdateWebAppInput, UpdateWebAppOutput> {
 
   override fun execute(input: UpdateWebAppInput): UpdateWebAppOutput {
@@ -39,6 +42,16 @@ class UpdateWebAppInteractor(
       webApp.updateLicense(input.licenseType)
     }
 
+    if (input.icon != null) {
+      val uploadedIcon = storage.upload(input.icon)
+      webApp.updateIcon(uploadedIcon.url)
+    }
+
+    if (input.splash != null) {
+      val uploadedSplash = storage.upload(input.splash)
+      webApp.updateIcon(uploadedSplash.url)
+    }
+
     repository.save(webApp)
     return UpdateWebAppOutput(
       status = true,
@@ -53,6 +66,8 @@ data class UpdateWebAppInput(
   val name: String?,
   val theme: AppTheme?,
   val licenseType: LicenseType?,
+  val icon: MultipartFile?,
+  val splash: MultipartFile?,
 ) : Input {
   override fun validate(): Boolean {
     if (id == 0L) {
