@@ -36,10 +36,14 @@ class CreateWebAppInteractor constructor(
       )
     }
 
+    val uploadedIcon = storage.upload(input.icon)
+    val uploadedSplash = storage.upload(input.splash)
     val webApp = WebApp(
       userId = input.userId,
       name = input.name,
       initUrl = input.initUrl,
+      icon = uploadedIcon.url,
+      splash = uploadedSplash.url,
       theme = input.theme,
       platform = input.platform,
       licenseType = input.licenseType,

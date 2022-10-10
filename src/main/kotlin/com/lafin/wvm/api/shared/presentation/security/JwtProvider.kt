@@ -1,7 +1,7 @@
 package com.lafin.wvm.api.shared.presentation.security
 
 import com.lafin.wvm.api.presentation.user.vo.DefaultUserDetails
-import com.lafin.wvm.api.shared.presentation.property.SecurityProperty
+import com.lafin.wvm.api.shared.property.SecurityProperty
 import com.lafin.wvm.api.shared.presentation.service.UserService
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwt

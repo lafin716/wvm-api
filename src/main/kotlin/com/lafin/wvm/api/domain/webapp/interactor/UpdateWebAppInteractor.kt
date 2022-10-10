@@ -11,14 +11,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class UpdateWebAppInteractor(
-  _repository: WebAppPersistence,
+  private val repository: WebAppPersistence,
 ) : UpdateUserUseCase<UpdateWebAppInput, UpdateWebAppOutput> {
-
-  val repository: WebAppPersistence
-
-  init {
-    repository = _repository
-  }
 
   override fun execute(input: UpdateWebAppInput): UpdateWebAppOutput {
     input.validate()

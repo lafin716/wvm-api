@@ -6,10 +6,7 @@ import com.lafin.wvm.api.domain.webapp.interactor.*
 import com.lafin.wvm.api.presentation.webapp.api.dto.WebAppDto
 import com.lafin.wvm.api.presentation.webapp.api.request.WebAppAddRequest
 import com.lafin.wvm.api.presentation.webapp.api.request.WebAppUpdateRequest
-import com.lafin.wvm.api.presentation.webapp.api.response.WebAppAddResponse
-import com.lafin.wvm.api.presentation.webapp.api.response.WebAppListResponse
-import com.lafin.wvm.api.presentation.webapp.api.response.WebAppResponse
-import com.lafin.wvm.api.presentation.webapp.api.response.WebAppUpdateResponse
+import com.lafin.wvm.api.presentation.webapp.api.response.*
 import com.lafin.wvm.api.shared.data.Email
 import com.lafin.wvm.api.shared.type.AppPlatform
 import com.lafin.wvm.api.shared.type.AppTheme
@@ -51,7 +48,7 @@ class WebAppInteractorAdapter(
     ))
   }
 
-  fun add(request: WebAppAddRequest, icon: MultipartFile, splash: MultipartFile, email: String): ResponseEntity<WebAppAddResponse> {
+  fun add(request: WebAppAddRequest, icon: MultipartFile?, splash: MultipartFile?, email: String): ResponseEntity<WebAppAddResponse> {
     val user = getUser(email)
 
     val theme = try {
@@ -122,6 +119,8 @@ class WebAppInteractorAdapter(
         id = output.app.id!!,
         name = output.app.name,
         initUrl = output.app.initUrl,
+        icon = output.app.icon,
+        splash = output.app.splash,
         platform = output.app.platform,
         theme = output.app.theme,
         licenseType = output.app.licenseType,
@@ -161,6 +160,8 @@ class WebAppInteractorAdapter(
           id = webApp.id!!,
           name = webApp.name,
           initUrl = webApp.initUrl,
+          icon = webApp.icon,
+          splash = webApp.splash,
           platform = webApp.platform,
           theme = webApp.theme,
           licenseType = webApp.licenseType,
@@ -176,6 +177,20 @@ class WebAppInteractorAdapter(
       }
     )
     )
+  }
+
+  fun delete(id: Long, email: String): ResponseEntity<WebAppDeleteResponse> {
+    val user = getUser(email)
+    val output = deleteWebAppInteractor.execute(
+      DeleteWebAppInput(
+        id = id,
+        userId = user.id!!,
+      )
+    )
+    return ResponseEntity.ok(WebAppDeleteResponse(
+      status = false,
+      message = output.message,
+    ))
   }
 
   private fun getUser(email: String): User {

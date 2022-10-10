@@ -9,14 +9,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class DeleteWebAppInteractor(
-  _repository: WebAppPersistence
+  private val repository: WebAppPersistence
 ) : DeleteUserUseCase<DeleteWebAppInput, DeleteWebAppOutput> {
-
-  val repository: WebAppPersistence
-
-  init {
-    repository = _repository
-  }
 
   override fun execute(input: DeleteWebAppInput): DeleteWebAppOutput {
     input.validate()
