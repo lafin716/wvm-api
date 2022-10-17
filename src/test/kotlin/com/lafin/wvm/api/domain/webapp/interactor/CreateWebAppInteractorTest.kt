@@ -1,22 +1,25 @@
 package com.lafin.wvm.api.domain.webapp.interactor
 
-import com.lafin.wvm.api.domain.webapp.gateway.UserPersistence
 import com.lafin.wvm.api.domain.webapp.gateway.WebAppPersistence
+import com.lafin.wvm.api.domain.webapp.gateway.WebAppStorage
 import com.lafin.wvm.api.domain.webapp.model.WebApp
 import com.lafin.wvm.api.shared.type.AppPlatform
 import com.lafin.wvm.api.shared.type.AppTheme
 import com.lafin.wvm.api.shared.type.LicenseType
-import io.mockk.*
-import org.junit.jupiter.api.Assertions.*
+import io.mockk.every
+import io.mockk.mockk
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.mockito.InjectMocks
 
 class CreateWebAppInteractorTest {
 
   private val mockRepository: WebAppPersistence = mockk()
+  private val mockStorage: WebAppStorage = mockk()
 
   @InjectMocks
-  val interactor: CreateWebAppInteractor = CreateWebAppInteractor(mockRepository)
+  val interactor: CreateWebAppInteractor = CreateWebAppInteractor(mockRepository, mockStorage)
 
   @Test
   fun 안드로이드_앱_신규_생성_성공() {
@@ -99,6 +102,8 @@ class CreateWebAppInteractorTest {
       userId = 1L,
       name = "신규앱",
       initUrl = "http://fmlive2.shop",
+      icon = null,
+      splash = null,
       platform = AppPlatform.ANDROID,
       theme = AppTheme.DEFAULT,
       licenseType = LicenseType.FREE,
@@ -110,6 +115,8 @@ class CreateWebAppInteractorTest {
       userId = 1L,
       name = "신규앱",
       initUrl = "http://fmlive2.shop",
+      icon = null,
+      splash = null,
       platform = AppPlatform.IOS,
       theme = AppTheme.DEFAULT,
       licenseType = LicenseType.FREE,

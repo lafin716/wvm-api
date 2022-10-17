@@ -1,4 +1,4 @@
-package com.lafin.wvm.api.shared.presentation.property
+package com.lafin.wvm.api.shared.property
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding

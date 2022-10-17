@@ -5,15 +5,13 @@ import com.lafin.wvm.api.presentation.webapp.adapter.WebAppInteractorAdapter
 import com.lafin.wvm.api.presentation.webapp.api.dto.WebAppDto
 import com.lafin.wvm.api.presentation.webapp.api.request.WebAppAddRequest
 import com.lafin.wvm.api.presentation.webapp.api.request.WebAppUpdateRequest
-import com.lafin.wvm.api.presentation.webapp.api.response.WebAppAddResponse
-import com.lafin.wvm.api.presentation.webapp.api.response.WebAppListResponse
-import com.lafin.wvm.api.presentation.webapp.api.response.WebAppResponse
-import com.lafin.wvm.api.presentation.webapp.api.response.WebAppUpdateResponse
+import com.lafin.wvm.api.presentation.webapp.api.response.*
 import com.lafin.wvm.api.shared.data.Email
 import com.lafin.wvm.api.shared.presentation.ApiV1Controller
 import com.lafin.wvm.api.shared.presentation.annotation.QueryStringResolver
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
@@ -44,8 +42,8 @@ class WebAppController(
   @PostMapping("/app")
   fun add(
     @RequestPart request: WebAppAddRequest,
-    @RequestPart(required = false) icon: MultipartFile,
-    @RequestPart(required = false) splash: MultipartFile,
+    @RequestPart(required = false) icon: MultipartFile?,
+    @RequestPart(required = false) splash: MultipartFile?,
     auth: Authentication
   ): ResponseEntity<WebAppAddResponse> {
     return adapter.add(request, icon, splash, auth.principal as String)
@@ -54,9 +52,19 @@ class WebAppController(
   @PutMapping("/app/{id}")
   fun update(
     @PathVariable(name = "id") id: Long,
-    @RequestBody request: WebAppUpdateRequest,
+    @RequestPart request: WebAppUpdateRequest,
+    @RequestPart(required = false) icon: MultipartFile?,
+    @RequestPart(required = false) splash: MultipartFile?,
     auth: Authentication
   ): ResponseEntity<WebAppUpdateResponse> {
-    return adapter.update(id, auth.principal as String, request)
+    return adapter.update(id, icon, splash, auth.principal as String, request)
+  }
+
+  @DeleteMapping("/app/{id}")
+  fun delete(
+    @PathVariable(name = "id") id: Long,
+    auth: Authentication
+  ): ResponseEntity<WebAppDeleteResponse> {
+    return adapter.delete(id, auth.principal as String)
   }
 }

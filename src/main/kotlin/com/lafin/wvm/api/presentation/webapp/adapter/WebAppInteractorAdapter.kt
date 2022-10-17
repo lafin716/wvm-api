@@ -6,10 +6,7 @@ import com.lafin.wvm.api.domain.webapp.interactor.*
 import com.lafin.wvm.api.presentation.webapp.api.dto.WebAppDto
 import com.lafin.wvm.api.presentation.webapp.api.request.WebAppAddRequest
 import com.lafin.wvm.api.presentation.webapp.api.request.WebAppUpdateRequest
-import com.lafin.wvm.api.presentation.webapp.api.response.WebAppAddResponse
-import com.lafin.wvm.api.presentation.webapp.api.response.WebAppListResponse
-import com.lafin.wvm.api.presentation.webapp.api.response.WebAppResponse
-import com.lafin.wvm.api.presentation.webapp.api.response.WebAppUpdateResponse
+import com.lafin.wvm.api.presentation.webapp.api.response.*
 import com.lafin.wvm.api.shared.data.Email
 import com.lafin.wvm.api.shared.type.AppPlatform
 import com.lafin.wvm.api.shared.type.AppTheme
@@ -29,29 +26,65 @@ class WebAppInteractorAdapter(
   private val getWebAppInteractor: GetWebAppInteractor,
 ) {
 
-  fun update(id: Long, email: String, request: WebAppUpdateRequest) : ResponseEntity<WebAppUpdateResponse>{
+  fun update(
+    id: Long,
+    icon: MultipartFile?,
+    splash: MultipartFile?,
+    email: String,
+    request: WebAppUpdateRequest
+  ): ResponseEntity<WebAppUpdateResponse> {
     val user = getUser(email)
-    val output = updateWebAppInteractor.execute(UpdateWebAppInput(
-      id = id,
-      userId = user.id!!,
-      name = request.name,
-      theme = request.theme,
-      licenseType = request.licenseType,
-    ))
-    if (!output.status) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(WebAppUpdateResponse(
-        status = false,
-        message = "앱 정보가 없습니다.",
-      ))
+    val theme = try {
+      if (request.theme == null) {
+        null
+      }
+      AppTheme.valueOf(request.theme!!)
+    } catch (e: Exception) {
+      null
+    }
+    val licenseType = try {
+      if (request.licenseType == null) {
+        null
+      }
+      LicenseType.valueOf(request.licenseType!!)
+    } catch (e: Exception) {
+      null
     }
 
-    return ResponseEntity.ok(WebAppUpdateResponse(
-      status = true,
-      message = "앱 정보가 업데이트 되었습니다.",
-    ))
+    val output = updateWebAppInteractor.execute(
+      UpdateWebAppInput(
+        id = id,
+        userId = user.id!!,
+        name = request.name,
+        theme = theme,
+        licenseType = licenseType,
+        icon = icon,
+        splash = splash,
+      )
+    )
+    if (!output.status) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+        WebAppUpdateResponse(
+          status = false,
+          message = "앱 정보가 없습니다.",
+        )
+      )
+    }
+
+    return ResponseEntity.ok(
+      WebAppUpdateResponse(
+        status = true,
+        message = "앱 정보가 업데이트 되었습니다.",
+      )
+    )
   }
 
-  fun add(request: WebAppAddRequest, icon: MultipartFile, splash: MultipartFile, email: String): ResponseEntity<WebAppAddResponse> {
+  fun add(
+    request: WebAppAddRequest,
+    icon: MultipartFile?,
+    splash: MultipartFile?,
+    email: String
+  ): ResponseEntity<WebAppAddResponse> {
     val user = getUser(email)
 
     val theme = try {
@@ -60,121 +93,157 @@ class WebAppInteractorAdapter(
       throw Exception("테마정보가 잘못되었습니다.")
     }
 
-    val platform = try {
-      AppPlatform.valueOf(request.platform)
-    } catch (e: Exception) {
-      throw Exception("플랫폼 정보가 잘못되었습니다.")
-    }
-
     val licenseType = try {
       LicenseType.valueOf(request.licenseType)
     } catch (e: Exception) {
       throw Exception("라이센스 정보가 잘못되었습니다.")
     }
 
-    val output = createWebAppInteractor.execute(CreateWebAppInput(
-      userId = user.id!!,
-      name = request.name,
-      initUrl = request.initUrl,
-      icon = icon,
-      splash = splash,
-      theme = theme,
-      platform = platform,
-      licenseType = licenseType,
-    ))
-    if (!output.status) {
-      return ResponseEntity.ok(WebAppAddResponse(
-        status = false,
-        message = output.message,
-      ))
+    val platform = try {
+      AppPlatform.valueOf(request.platform)
+    } catch (e: Exception) {
+      throw Exception("플랫폼 정보가 잘못되었습니다.")
     }
 
-    return ResponseEntity.ok(WebAppAddResponse(
-      status = true,
-      message = "새로운 앱이 추가되었습니다."
-    ))
+    val output = createWebAppInteractor.execute(
+      CreateWebAppInput(
+        userId = user.id!!,
+        name = request.name,
+        initUrl = request.initUrl,
+        icon = icon,
+        splash = splash,
+        theme = theme,
+        platform = platform,
+        licenseType = licenseType,
+      )
+    )
+    if (!output.status) {
+      return ResponseEntity.ok(
+        WebAppAddResponse(
+          status = false,
+          message = output.message,
+        )
+      )
+    }
+
+    return ResponseEntity.ok(
+      WebAppAddResponse(
+        status = true,
+        message = "새로운 앱이 추가되었습니다."
+      )
+    )
   }
 
   fun get(id: Long, email: String): ResponseEntity<WebAppResponse> {
     val user = getUser(email)
-    val output = getWebAppInteractor.execute(GetWebAppInput(
-      id = id,
-      userId = user.id!!
-    ))
+    val output = getWebAppInteractor.execute(
+      GetWebAppInput(
+        id = id,
+        userId = user.id!!
+      )
+    )
     if (!output.status) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(WebAppResponse(
-        status = false,
-        message = output.message,
-      ))
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+        WebAppResponse(
+          status = false,
+          message = output.message,
+        )
+      )
     }
 
     if (output.app == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(WebAppResponse(
-        status = false,
-        message = "앱 정보가 없습니다.",
-      ))
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+        WebAppResponse(
+          status = false,
+          message = "앱 정보가 없습니다.",
+        )
+      )
     }
 
-    return ResponseEntity.ok(WebAppResponse(
-      status = false,
-      message = output.message,
-      app = WebAppDto(
-        id = output.app.id!!,
-        name = output.app.name,
-        initUrl = output.app.initUrl,
-        platform = output.app.platform,
-        theme = output.app.theme,
-        licenseType = output.app.licenseType,
-        status = output.app.status,
-        buildStatus = output.app.buildStatus,
-        deployStatus = output.app.deployStatus,
-        createdAt = output.app.createdAt,
-        updatedAt = output.app.updatedAt,
-        lastBuiltAt = output.app.lastBuiltAt,
-        lastDeployedAt = output.app.lastDeployedAt,
-        deletedAt = output.app.deletedAt,
-      ),
-    ))
+    return ResponseEntity.ok(
+      WebAppResponse(
+        status = true,
+        message = output.message,
+        app = WebAppDto(
+          id = output.app.id!!,
+          name = output.app.name,
+          initUrl = output.app.initUrl,
+          icon = output.app.icon,
+          splash = output.app.splash,
+          platform = output.app.platform,
+          theme = output.app.theme,
+          licenseType = output.app.licenseType,
+          status = output.app.status,
+          buildStatus = output.app.buildStatus,
+          deployStatus = output.app.deployStatus,
+          createdAt = output.app.createdAt,
+          updatedAt = output.app.updatedAt,
+          lastBuiltAt = output.app.lastBuiltAt,
+          lastDeployedAt = output.app.lastDeployedAt,
+          deletedAt = output.app.deletedAt,
+        ),
+      )
+    )
   }
 
   fun getList(email: String, condition: WebAppCondition): ResponseEntity<WebAppListResponse> {
     val user = getUser(email)
-    val appsOutput = getListWebAppInteractor.execute(GetListWebAppInput(
-      WebAppCondition(
-        userId = user.id,
-        name = condition.name,
-        platform = condition.platform,
-        page = condition.page - 1,
-        size = condition.size,
+    val appsOutput = getListWebAppInteractor.execute(
+      GetListWebAppInput(
+        WebAppCondition(
+          userId = user.id,
+          name = condition.name,
+          platform = condition.platform,
+          page = condition.page - 1,
+          size = condition.size,
+        )
       )
-    ))
+    )
     if (!appsOutput.status) {
       throw Exception(appsOutput.message)
     }
 
     return ResponseEntity.ok(
       WebAppListResponse(
-      status = true,
-      message = "앱 목록 조회 완료",
-      apps = appsOutput.app.toList().map {
-        webApp ->  WebAppDto(
-          id = webApp.id!!,
-          name = webApp.name,
-          initUrl = webApp.initUrl,
-          platform = webApp.platform,
-          theme = webApp.theme,
-          licenseType = webApp.licenseType,
-          status = webApp.status,
-          buildStatus = webApp.buildStatus,
-          deployStatus = webApp.deployStatus,
-          createdAt = webApp.createdAt,
-          updatedAt = webApp.updatedAt,
-          lastBuiltAt = webApp.lastBuiltAt,
-          lastDeployedAt = webApp.lastDeployedAt,
-          deletedAt = webApp.deletedAt,
-        )
-      }
+        status = true,
+        message = "앱 목록 조회 완료",
+        apps = appsOutput.app.toList().map { webApp ->
+          WebAppDto(
+            id = webApp.id!!,
+            name = webApp.name,
+            initUrl = webApp.initUrl,
+            icon = webApp.icon,
+            splash = webApp.splash,
+            platform = webApp.platform,
+            theme = webApp.theme,
+            licenseType = webApp.licenseType,
+            status = webApp.status,
+            buildStatus = webApp.buildStatus,
+            deployStatus = webApp.deployStatus,
+            createdAt = webApp.createdAt,
+            updatedAt = webApp.updatedAt,
+            lastBuiltAt = webApp.lastBuiltAt,
+            lastDeployedAt = webApp.lastDeployedAt,
+            deletedAt = webApp.deletedAt,
+          )
+        }
+      )
     )
+  }
+
+  fun delete(id: Long, email: String): ResponseEntity<WebAppDeleteResponse> {
+    val user = getUser(email)
+    val output = deleteWebAppInteractor.execute(
+      DeleteWebAppInput(
+        id = id,
+        userId = user.id!!,
+      )
+    )
+    return ResponseEntity.ok(
+      WebAppDeleteResponse(
+        status = true,
+        message = output.message,
+      )
     )
   }
 

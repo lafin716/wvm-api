@@ -23,6 +23,8 @@ data class WebAppEntity (
   var userId: Long,
   var name: String,
   var initUrl: String,
+  var icon: String?,
+  var splash: String?,
   var platform: AppPlatform,
   var theme: AppTheme,
   var licenseType: LicenseType,

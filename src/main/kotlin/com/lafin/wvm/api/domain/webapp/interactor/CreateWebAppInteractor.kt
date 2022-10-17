@@ -37,15 +37,14 @@ class CreateWebAppInteractor constructor(
       )
     }
 
-    var icon: FileInfo? = input.icon?.let { storage.upload(input.icon) }
-    var splash: FileInfo? = input.splash?.let { storage.upload(input.splash) }
-
+    val uploadedIcon = storage.upload(input.icon)
+    val uploadedSplash = storage.upload(input.splash)
     val webApp = WebApp(
       userId = input.userId,
       name = input.name,
       initUrl = input.initUrl,
-      icon = icon?.path,
-      splash = splash?.path,
+      icon = uploadedIcon.url,
+      splash = uploadedSplash.url,
       theme = input.theme,
       platform = input.platform,
       licenseType = input.licenseType,

@@ -1,7 +1,7 @@
 package com.lafin.wvm.api
 
-import com.lafin.wvm.api.shared.presentation.property.FileProperty
-import com.lafin.wvm.api.shared.presentation.property.SecurityProperty
+import com.lafin.wvm.api.shared.property.FileProperty
+import com.lafin.wvm.api.shared.property.SecurityProperty
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication

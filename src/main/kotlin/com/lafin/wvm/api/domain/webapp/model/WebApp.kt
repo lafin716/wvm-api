@@ -142,6 +142,16 @@ data class WebApp (
     updateBuildState()
   }
 
+  fun updateIcon(icon: String) {
+    this.icon = icon
+    addLog("아이콘이 업데이트 되었습니다.")
+  }
+
+  fun updateSplash(splash: String) {
+    this.splash = splash
+    addLog("스플래시 이미지가 업데이트 되었습니다.")
+  }
+
   fun addLog(adminUserId: Long, message: String) {
     addLog(
       userId = adminUserId,

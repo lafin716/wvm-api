@@ -10,15 +10,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class GetWebAppInteractor(
-  _repository: WebAppPersistence,
+  private val repository: WebAppPersistence,
 ) : UseCase<GetWebAppInput, GetWebAppOutput> {
-
-  val repository: WebAppPersistence
-
-  init {
-    repository = _repository
-  }
-
   override fun execute(input: GetWebAppInput): GetWebAppOutput {
     input.validate()
 
