@@ -33,12 +33,7 @@ data class WebApp (
   fun create() {
     status = WebAppStatus.CREATED
     createdAt = LocalDateTime.now()
-  }
-
-  fun ready() {
-    status = WebAppStatus.READY
-    buildStatus = BuildStatus.PREPARED
-    updatedAt = LocalDateTime.now()
+    updateBuildState()
   }
 
   fun running() {
@@ -132,16 +127,19 @@ data class WebApp (
   fun updateAppName(name: String) {
     this.name = name
     addLog("앱 이름이 변경되었습니다.")
+    updateBuildState()
   }
 
   fun updateAppTheme(appTheme: AppTheme) {
     this.theme = appTheme
     addLog("앱 테마 정보가 변경되었습니다.")
+    updateBuildState()
   }
 
   fun updateLicense(licenseType: LicenseType) {
     this.licenseType = licenseType
     addLog("서비스 라이센스가 변경되었습니다.")
+    updateBuildState()
   }
 
   fun addLog(adminUserId: Long, message: String) {
@@ -153,7 +151,7 @@ data class WebApp (
 
   fun updateBuildState() {
     if (isBuildable()) {
-      buildStatus = BuildStatus.PREPARED
+      buildStatus = getUpdatableBuildState(BuildStatus.PREPARED)
       updatedAt = LocalDateTime.now()
       addLog("빌드 준비가 완료 되었습니다.")
     }
@@ -170,6 +168,15 @@ data class WebApp (
         && initUrl.isNotBlank()
         && icon?.isNotBlank() ?: false
         && splash?.isNotBlank() ?: false
+  }
+
+  private fun getUpdatableBuildState(state: BuildStatus): BuildStatus {
+    if (buildStatus != BuildStatus.COMPLETE
+      && buildStatus != BuildStatus.PENDING) {
+      return state
+    }
+
+    return buildStatus
   }
 
   private fun addLog(message: String, userId: Long = this.userId) {

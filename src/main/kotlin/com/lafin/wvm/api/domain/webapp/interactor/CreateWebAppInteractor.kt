@@ -7,6 +7,7 @@ import com.lafin.wvm.api.domain.webapp.model.WebApp
 import com.lafin.wvm.api.shared.domain.io.Input
 import com.lafin.wvm.api.shared.domain.io.Output
 import com.lafin.wvm.api.domain.webapp.usecase.CreateUserUseCase
+import com.lafin.wvm.api.shared.data.FileInfo
 import com.lafin.wvm.api.shared.type.AppPlatform
 import com.lafin.wvm.api.shared.type.AppTheme
 import com.lafin.wvm.api.shared.type.LicenseType
@@ -36,10 +37,15 @@ class CreateWebAppInteractor constructor(
       )
     }
 
+    var icon: FileInfo? = input.icon?.let { storage.upload(input.icon) }
+    var splash: FileInfo? = input.splash?.let { storage.upload(input.splash) }
+
     val webApp = WebApp(
       userId = input.userId,
       name = input.name,
       initUrl = input.initUrl,
+      icon = icon?.path,
+      splash = splash?.path,
       theme = input.theme,
       platform = input.platform,
       licenseType = input.licenseType,
