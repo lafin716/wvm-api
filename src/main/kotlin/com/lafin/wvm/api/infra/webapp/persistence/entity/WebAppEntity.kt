@@ -26,6 +26,7 @@ data class WebAppEntity (
   var icon: String?,
   var splash: String?,
   var platform: AppPlatform,
+  var version: String,
   var theme: AppTheme,
   var licenseType: LicenseType,
   var status: WebAppStatus,

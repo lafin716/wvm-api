@@ -2,6 +2,7 @@ package com.lafin.wvm.api.infra.webapp.persistence.convert
 
 import com.lafin.wvm.api.domain.webapp.model.WebApp
 import com.lafin.wvm.api.infra.webapp.persistence.entity.WebAppEntity
+import com.lafin.wvm.api.shared.data.Version
 import com.lafin.wvm.api.shared.infra.entity.Convertable
 import org.springframework.stereotype.Component
 
@@ -16,6 +17,7 @@ class WebAppConverter : Convertable<WebAppEntity, WebApp> {
       initUrl = entity.initUrl,
       icon = entity.icon,
       splash = entity.splash,
+      version = Version.parse(entity.version),
       theme = entity.theme,
       platform = entity.platform,
       licenseType = entity.licenseType,
@@ -38,6 +40,7 @@ class WebAppConverter : Convertable<WebAppEntity, WebApp> {
       initUrl = aggregate.initUrl,
       icon = aggregate.icon,
       splash = aggregate.splash,
+      version = aggregate.version.toVersionString(),
       theme = aggregate.theme,
       platform = aggregate.platform,
       licenseType = aggregate.licenseType,

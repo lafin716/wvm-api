@@ -1,5 +1,7 @@
 package com.lafin.wvm.api.domain.webapp.model
 
+import com.lafin.wvm.api.shared.consts.WebAppConst
+import com.lafin.wvm.api.shared.data.Version
 import com.lafin.wvm.api.shared.domain.Aggregate
 import com.lafin.wvm.api.shared.status.BuildStatus
 import com.lafin.wvm.api.shared.status.DeployStatus
@@ -17,6 +19,7 @@ data class WebApp (
   var platform: AppPlatform,
   var icon: String? = "",
   var splash: String? = "",
+  var version: Version = Version.parse(WebAppConst.VERSION),
   var theme: AppTheme = AppTheme.DEFAULT,
   var licenseType: LicenseType = LicenseType.FREE,
   var status: WebAppStatus = WebAppStatus.CREATED,
@@ -150,6 +153,27 @@ data class WebApp (
   fun updateSplash(splash: String) {
     this.splash = splash
     addLog("스플래시 이미지가 업데이트 되었습니다.")
+  }
+
+  fun updateMajorVersion() {
+    val prevVersion = version.toVersionString()
+    version = version.updateMajor()
+    addLog("앱 버전이 업데이트 되었습니다. ($prevVersion -> ${version.toVersionString()})")
+    updateBuildState()
+  }
+
+  fun updateMinorVersion() {
+    val prevVersion = version.toVersionString()
+    version = version.updateMinor()
+    addLog("앱 버전이 업데이트 되었습니다. ($prevVersion -> ${version.toVersionString()})")
+    updateBuildState()
+  }
+
+  fun updatePatchVersion() {
+    val prevVersion = version.toVersionString()
+    version = version.updatePatch()
+    addLog("앱 버전이 업데이트 되었습니다. ($prevVersion -> ${version.toVersionString()})")
+    updateBuildState()
   }
 
   fun addLog(adminUserId: Long, message: String) {
