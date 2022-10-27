@@ -42,6 +42,8 @@ class SecurityConfig(
       .authorizeHttpRequests()
       .antMatchers("/api/**/auth/**")
       .permitAll()
+      .antMatchers("/subscribe/**")
+      .permitAll()
       .anyRequest()
       .authenticated()
       .and()
