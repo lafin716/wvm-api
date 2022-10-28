@@ -4,5 +4,5 @@ import com.lafin.wvm.api.shared.domain.io.Input
 import com.lafin.wvm.api.shared.domain.io.Output
 import com.lafin.wvm.api.shared.domain.UseCase
 
-interface ComplateBuildWebAppUseCase<I: Input, O: Output>: UseCase<I, O> {
+interface CompleteBuildWebAppUseCase<I: Input, O: Output>: UseCase<I, O> {
 }
