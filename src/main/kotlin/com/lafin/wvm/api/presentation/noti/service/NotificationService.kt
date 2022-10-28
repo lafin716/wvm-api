@@ -18,11 +18,9 @@ class NotificationService(
     val uuid = userId.toString() + "-" + System.currentTimeMillis()
     val emitter = SseEmitter(timeout)
     emitter.onCompletion {
-      log.info("onCompletion")
       emitterRepository.remove(uuid)
     }
     emitter.onTimeout {
-      log.info("onTimeout")
       emitterRepository.remove(uuid)
     }
 
@@ -47,7 +45,6 @@ class NotificationService(
         .data(data)
         .build())
     } catch (e: Exception) {
-      e.printStackTrace()
       log.info("send error")
       emitterRepository.remove(key)
     }

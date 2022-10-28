@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 
 @Service
-class GetListByUserIdInteractor: GetListByUserIdUseCase<GetListByUserIdInput, GetListByUserIdOutput> {
-    override fun execute(input: GetListByUserIdInput): GetListByUserIdOutput {
-        return GetListByUserIdOutput(true)
-    }
+class GetListByUserIdInteractor : GetListByUserIdUseCase<GetListByUserIdInput, GetListByUserIdOutput> {
+  override fun execute(input: GetListByUserIdInput): GetListByUserIdOutput {
+
+
+    return GetListByUserIdOutput(true)
+  }
 }
 
 data class GetListByUserIdInput(
