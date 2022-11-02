@@ -5,6 +5,7 @@ import com.lafin.wvm.api.domain.webapp.gateway.WebAppPersistence
 import com.lafin.wvm.api.domain.webapp.usecase.CompleteBuildWebAppUseCase
 import com.lafin.wvm.api.shared.domain.io.Input
 import com.lafin.wvm.api.shared.domain.io.Output
+import com.lafin.wvm.api.shared.status.BuildStatus
 import org.springframework.stereotype.Component
 
 @Component
@@ -22,11 +23,12 @@ class CompleteBuildWebAppInteractor(
       status = false,
       message = "앱을 찾을 수 없습니다.",
     )
-    webApp.complateBuild()
+
+    webApp.updateBuildStatus(buildStatus = input.buildStatus)
     repository.save(webApp)
     return CompleteBuildWebAppOutput(
       status = true,
-      message = "빌드 요청이 완료되었습니다.",
+      message = "빌드가 완료되었습니다.",
     )
   }
 }
@@ -34,6 +36,7 @@ class CompleteBuildWebAppInteractor(
 data class CompleteBuildWebAppInput(
   val id: Long,
   val userId: Long,
+  val buildStatus: BuildStatus,
 ) : Input {
   override fun validate(): Boolean {
     return true

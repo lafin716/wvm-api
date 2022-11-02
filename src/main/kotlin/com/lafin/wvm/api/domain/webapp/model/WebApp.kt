@@ -191,6 +191,17 @@ data class WebApp (
     }
   }
 
+  fun updateBuildStatus(buildStatus: BuildStatus) {
+    if (this.buildStatus == BuildStatus.COMPLETE) {
+      return complateBuild()
+    } else if (this.buildStatus == BuildStatus.ERROR) {
+      return failBuild()
+    }
+
+    this.buildStatus = buildStatus
+    updatedAt = LocalDateTime.now()
+  }
+
   private fun isActive(): Boolean {
     return status == WebAppStatus.CREATED
         || status == WebAppStatus.RUNNING
