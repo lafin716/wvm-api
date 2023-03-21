@@ -3,8 +3,10 @@ package com.lafin.wvm.api.infra.webapp.persistence.adapter
 import com.lafin.wvm.api.domain.webapp.gateway.WebAppCondition
 import com.lafin.wvm.api.domain.webapp.gateway.UserPersistence
 import com.lafin.wvm.api.domain.webapp.gateway.WebAppPersistence
+import com.lafin.wvm.api.domain.webapp.model.ChangeLog
 import com.lafin.wvm.api.domain.webapp.model.WebApp
 import com.lafin.wvm.api.infra.webapp.persistence.convert.WebAppConverter
+import com.lafin.wvm.api.infra.webapp.persistence.repository.ChangeLogRepository
 import com.lafin.wvm.api.infra.webapp.persistence.repository.WebAppRepository
 import com.lafin.wvm.api.infra.webapp.persistence.repository.custom.WebAppRepositoryCustom
 import com.lafin.wvm.api.shared.domain.gateway.Order
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component
 @Component
 class WebAppPersistenceAdapter(
   val repository: WebAppRepository,
+  val logRepository: ChangeLogRepository,
   val dsl: WebAppRepositoryCustom,
   val webAppConverter: WebAppConverter,
 ) : WebAppPersistence {
@@ -65,5 +68,12 @@ class WebAppPersistenceAdapter(
     condition.userId ?: return null
     val webApp = repository.findTopByIdAndUserId(condition.id, condition.userId) ?: return null
     return webAppConverter.toAggregate(webApp)
+  }
+
+  override fun getChangeLogs(condition: WebAppCondition): List<ChangeLog> {
+    condition.id ?: return listOf()
+
+    logRepository.findAllByAppId(condition.id, PageRequest.of(condition.page, condition.size))
+    TODO("Not yet implemented")
   }
 }

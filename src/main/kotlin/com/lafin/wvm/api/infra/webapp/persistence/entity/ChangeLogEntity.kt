@@ -1,5 +1,6 @@
 package com.lafin.wvm.api.infra.webapp.persistence.entity
 
+import com.lafin.wvm.api.shared.infra.entity.PersistEntity
 import com.lafin.wvm.api.shared.type.RoleType
 import java.time.LocalDateTime
 import javax.persistence.Entity
@@ -13,7 +14,7 @@ class ChangeLogEntity(
   _appId: Long,
   _userId: Long,
   _message: String,
-) {
+) : PersistEntity {
 
   @Id
   @GeneratedValue
