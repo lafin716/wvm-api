@@ -80,7 +80,7 @@ data class WebApp (
   }
 
   fun build(): Boolean {
-    if ((status?.buildable ?: false) == false) {
+    if (status.buildable == false) {
       return false
     }
 
@@ -185,6 +185,7 @@ data class WebApp (
 
   fun updateBuildState() {
     if (isBuildable()) {
+      status = WebAppStatus.READY
       buildStatus = getUpdatableBuildState(BuildStatus.PREPARED)
       updatedAt = LocalDateTime.now()
       addLog("빌드 준비가 완료 되었습니다.")

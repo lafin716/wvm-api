@@ -49,9 +49,10 @@ class UpdateWebAppInteractor(
 
     if (input.splash != null) {
       val uploadedSplash = storage.upload(input.splash)
-      webApp.updateIcon(uploadedSplash.url)
+      webApp.updateSplash(uploadedSplash.url)
     }
 
+    webApp.updateBuildState()
     repository.save(webApp)
     return UpdateWebAppOutput(
       status = true,
